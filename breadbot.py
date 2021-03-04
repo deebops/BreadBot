@@ -7,11 +7,12 @@ import time
 import sys
 import finvizz
 import shortsqueeze
-import help
+
 
 
 # Connect to Discord
 client = commands.Bot(command_prefix = '.')
+client.remove_command("help")
 
 @client.event
 @commands.has_role("Admin")
@@ -37,7 +38,12 @@ async def on_message(message):
             else:   
                 await message.channel.send(finvizz.prettify(finviz_data))
         elif message.content.find(".help") != -1:
-            help.help()
+            @client.command()
+            async def help(ctx):
+                em = discord.Embed(title = 'Commands', description = 'How to use the available commands')
+                em.add_field(name = 'Example', value = '.AAPL\n.ss AAPL')
+                em.add_field(name = 'Returns', value ='Stock info from Finviz.com\nShort info from Shortsqueeze.com')
+                await ctx.send(embed = em)
             
 print("Connecting")
 client.run(config.token)
